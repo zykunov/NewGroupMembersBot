@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
@@ -34,10 +34,26 @@ func GetAllUsers(userId int64, vkgroup_id string) (usersFromDB []*models.User) {
 
 	err := GetDB().Table("users").Select("vk_id").Where("user_id = ? AND vkgroup_id = ?", int(userId), vkgroup_id).Find(&result).Error
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 
 	return result
 }
 
 // Удаление пользователей
+func DeleteUsersByGroupId(userId int64, groupId string) (msg string) {
+
+	result := make([]*models.User, 0)
+
+	err := GetDB().Table("users").Where("user_id = ? AND vkgroup_id LIKE ? ", int(userId), groupId).Find(&result).Error
+	if err != nil {
+		log.Println(err)
+	}
+
+	err = GetDB().Unscoped().Delete(&result).Error //Безвозвратное удаление
+	if err != nil {
+		return "Не получилось удалить пользователей группы"
+	}
+
+	return "Группа " + groupId + " удалена!"
+}

@@ -88,7 +88,7 @@ func DeleteGroupById(userId int64, groupLink string) (msg string) {
 		fmt.Println(err)
 	}
 
-	err = GetDB().Delete(&result).Error
+	err = GetDB().Delete(&result).Error // мягкое удаление
 	if err != nil {
 		return "Группа не найдена"
 	}

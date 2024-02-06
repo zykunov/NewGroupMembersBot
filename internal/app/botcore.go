@@ -47,18 +47,6 @@ func BotStart() {
 		),
 	)
 
-	/*var numericKeyboard2 = tgbotapi.NewReplyKeyboard(
-		tgbotapi.NewKeyboardButtonRow(
-			tgbotapi.NewKeyboardButton("✅Добавить группу для отслеживания"),
-		),
-		tgbotapi.NewKeyboardButtonRow(
-			tgbotapi.NewKeyboardButton("Посмотреть список групп"),
-		),
-		tgbotapi.NewKeyboardButtonRow(
-			tgbotapi.NewKeyboardButton("⬅️ Назад"),
-		),
-	)*/
-
 	for update := range updates {
 		if update.Message != nil {
 			log.Printf("[%v:%s] %s", update.Message.From.ID, update.Message.From.UserName, update.Message.Text)
@@ -123,6 +111,7 @@ func BotStart() {
 						groupMode = false
 					case "❌Удалить группу":
 						msg.Text = storage.DeleteGroupById(update.Message.Chat.ID, "https://vk.com/"+previusMessage)
+						msg.Text = storage.DeleteUsersByGroupId(update.Message.Chat.ID, previusMessage)
 						log.Printf("group name:", previusMessage)
 						linkWait = true
 						delete = true
