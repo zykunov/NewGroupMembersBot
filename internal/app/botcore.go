@@ -125,13 +125,21 @@ func BotStart() {
 
 						for _, valueApi := range usersFromVK {
 
+							var find bool
+
 							for _, valueDB := range usersFromDB {
 
-								if valueApi.VkId != valueDB.VkId {
-									log.Println("new user finded!")
-									string := "https://vk.com/id" + strconv.Itoa(valueApi.VkId) + "\n"
-									stBuilder.WriteString(string)
+								if valueApi.VkId == valueDB.VkId {
+									/* Сделать добавление польз в Базу */
+									find = true
+									break
 								}
+							}
+
+							if !find {
+								log.Println("new user finded!")
+								string := "https://vk.com/id" + strconv.Itoa(valueApi.VkId) + "\n"
+								stBuilder.WriteString(string)
 							}
 						}
 						if stBuilder.String() == "" {
