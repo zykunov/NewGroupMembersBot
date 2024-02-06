@@ -118,8 +118,8 @@ func BotStart() {
 						previusMessage = ""
 					case "🆕Смотреть новых людей":
 						msg.DisableWebPagePreview = true
-						usersFromDB := storage.GetAllUsers(update.Message.Chat.ID, "best_svao")
-						usersFromVK := GetGroupMembers("pavelostrovski", int(update.Message.Chat.ID))
+						usersFromDB := storage.GetAllUsers(update.Message.Chat.ID, previusMessage)
+						usersFromVK := GetGroupMembers(previusMessage, int(update.Message.Chat.ID))
 
 						var stBuilder strings.Builder
 
