@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	keyBoardGenerator "github.com/zykunov/courseGoFirst/vkApiBot/pkg/keyboardgenerator"
 	"github.com/zykunov/courseGoFirst/vkApiBot/storage"
 )
 
@@ -99,7 +100,7 @@ func BotStart() {
 						groupMode = true
 						log.Println("group mode activated")
 						groups := storage.GetAllGroups(update.Message.Chat.ID)
-						msg.ReplyMarkup = NewKeyBoard(groups)
+						msg.ReplyMarkup = keyBoardGenerator.NewKeyBoard(groups)
 					case "Посмотреть список групп":
 						msg.DisableWebPagePreview = true
 						msg.Text = storage.GetAllGroups(update.Message.Chat.ID)
