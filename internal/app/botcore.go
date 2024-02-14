@@ -1,12 +1,14 @@
 package app
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/zykunov/courseGoFirst/vkApiBot/models"
 	keyBoardGenerator "github.com/zykunov/courseGoFirst/vkApiBot/pkg/keyboardgenerator"
 	"github.com/zykunov/courseGoFirst/vkApiBot/storage"
 )
@@ -61,7 +63,7 @@ func BotStart() {
 				}
 				groupExist := storage.CheckGroupById(update.Message.Text, update.Message.Chat.ID)
 				if groupExist {
-					msg.ReplyMarkup = NewKeyBoard("🆕Смотреть новых людей\n❌Удалить группу")
+					msg.ReplyMarkup = keyBoardGenerator.NewKeyBoard("🆕Смотреть новых людей\n❌Удалить группу")
 					msg.Text = "Выберите действия с группой"
 					groupMode = false
 					log.Println("disable group mode")
@@ -123,6 +125,7 @@ func BotStart() {
 						usersFromVK := GetGroupMembers(previusMessage, int(update.Message.Chat.ID))
 
 						var stBuilder strings.Builder
+						var users2Add []models.User
 
 						for _, valueApi := range usersFromVK {
 
@@ -131,7 +134,6 @@ func BotStart() {
 							for _, valueDB := range usersFromDB {
 
 								if valueApi.VkId == valueDB.VkId {
-									/* Сделать добавление польз в Базу */
 									find = true
 									break
 								}
@@ -141,8 +143,14 @@ func BotStart() {
 								log.Println("new user finded!")
 								string := "https://vk.com/id" + strconv.Itoa(valueApi.VkId) + "\n"
 								stBuilder.WriteString(string)
+								users2Add = append(users2Add, valueApi)
 							}
 						}
+
+						fmt.Println(users2Add)
+
+						storage.UserAdd(users2Add)
+
 						if stBuilder.String() == "" {
 							msg.Text = "Новых пользователей нет"
 						} else {
