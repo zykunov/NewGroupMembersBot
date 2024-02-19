@@ -154,7 +154,7 @@ func BotStart() {
 						if stBuilder.String() == "" {
 							msg.Text = "Новых пользователей нет"
 						} else {
-							stBuilder.WriteString("⬆️новые пользователи⬆️")
+							stBuilder.WriteString("⬆️новые пользователи⬆️ Открыть все вкладки из списка https://apsolyamov.ru/files/url_opener.html")
 							msg.Text = stBuilder.String()
 						}
 					case "❓Как этим пользоваться?":
